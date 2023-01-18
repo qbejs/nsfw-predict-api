@@ -1,7 +1,13 @@
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI
 import opennsfw2 as n2
+
+# Custom logger
+logger = logging.getLogger(__name__)
+config_path = Path(__file__).with_name("log_config.json")
+
 app = FastAPI()
 
 

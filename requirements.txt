@@ -7,3 +7,4 @@ Pillow>=9.0.0
 scikit-image>=0.18.0
 tensorflow-macos
 tqdm>=4.62
+loguru~=0.6.0
