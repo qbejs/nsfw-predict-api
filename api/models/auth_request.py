@@ -6,5 +6,6 @@ from pydantic import BaseModel
 # languages: List[str]
 # base_language: str
 
+
 class AuthRequest(BaseModel):
     token: str

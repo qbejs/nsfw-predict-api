@@ -13,25 +13,25 @@ from ._typing import NDUInt8Array, NDFloat32Array
 
 
 def make_grad_cam_heatmap(
-        preprocessed_image: NDFloat32Array,
-        model: tf.keras.Model,
-        last_conv_layer_name: str,
-        classification_linear_layer_name: str,
-        prediction_index: Optional[int] = None
+    preprocessed_image: NDFloat32Array,
+    model: tf.keras.Model,
+    last_conv_layer_name: str,
+    classification_linear_layer_name: str,
+    prediction_index: Optional[int] = None,
 ) -> NDFloat32Array:
     """
     References:
     https://keras.io/examples/vision/grad_cam/
     """
     if len(preprocessed_image.shape) != 3:
-        raise ValueError(
-            "Input preprocessed image array must have 3 dimensions."
-        )
+        raise ValueError("Input preprocessed image array must have 3 dimensions.")
 
     grad_model = tf.keras.models.Model(
         model.inputs,
-        [model.get_layer(last_conv_layer_name).output,
-         model.get_layer(classification_linear_layer_name).output]
+        [
+            model.get_layer(last_conv_layer_name).output,
+            model.get_layer(classification_linear_layer_name).output,
+        ],
     )
 
     with tf.GradientTape() as tape:
@@ -58,21 +58,14 @@ def make_grad_cam_heatmap(
     return heatmap
 
 
-def _resize(
-        image: NDUInt8Array,
-        target_height: int,
-        target_width: int
-) -> NDUInt8Array:
+def _resize(image: NDUInt8Array, target_height: int, target_width: int) -> NDUInt8Array:
     pil_image = tf.keras.preprocessing.image.array_to_img(image)
     pil_image = pil_image.resize((target_width, target_height))
     return np.array(pil_image)
 
 
 def save_grad_cam(
-        pil_image: Image,
-        heatmap: NDFloat32Array,
-        grad_cam_path: str,
-        alpha: float
+    pil_image: Image, heatmap: NDFloat32Array, grad_cam_path: str, alpha: float
 ) -> None:
     """
     References:
@@ -102,14 +95,17 @@ def save_grad_cam(
 
 
 def make_and_save_nsfw_grad_cam(
-        pil_image: Image,
-        preprocessing: Preprocessing,
-        open_nsfw_model: tf.keras.Model,
-        grad_cam_path: str,
-        alpha: float
+    pil_image: Image,
+    preprocessing: Preprocessing,
+    open_nsfw_model: tf.keras.Model,
+    grad_cam_path: str,
+    alpha: float,
 ) -> None:
     heatmap = make_grad_cam_heatmap(
-        preprocess_image(pil_image, preprocessing), open_nsfw_model,
-        "activation_stage3_block2", "fc_nsfw", 1
+        preprocess_image(pil_image, preprocessing),
+        open_nsfw_model,
+        "activation_stage3_block2",
+        "fc_nsfw",
+        1,
     )
     save_grad_cam(pil_image, heatmap, grad_cam_path, alpha)

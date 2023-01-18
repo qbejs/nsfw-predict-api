@@ -17,8 +17,7 @@ class Preprocessing(Enum):
 
 
 def preprocess_image(
-        pil_image: Image,
-        preprocessing: Preprocessing = Preprocessing.YAHOO
+    pil_image: Image, preprocessing: Preprocessing = Preprocessing.YAHOO
 ) -> NDFloat32Array:
     """
     Preprocessing for the pre-trained Open NSFW model weights.
@@ -36,16 +35,16 @@ def preprocess_image(
         pil_image_resized.save(fh_im, format="JPEG")
         fh_im.seek(0)
 
-        image: NDFloat32Array = skimage.io.imread(
-            fh_im, as_gray=False
-        ).astype(np.float32)
+        image: NDFloat32Array = skimage.io.imread(fh_im, as_gray=False).astype(
+            np.float32
+        )
 
         height, width, _ = image.shape
         h, w = (224, 224)
 
         h_off = max((height - h) // 2, 0)
         w_off = max((width - w) // 2, 0)
-        image = image[h_off:h_off + h, w_off:w_off + w, :]
+        image = image[h_off : h_off + h, w_off : w_off + w, :]
 
     elif preprocessing == Preprocessing.SIMPLE:
         pil_image_resized = pil_image.resize((224, 224), resample=Image.BILINEAR)

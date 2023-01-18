@@ -5,7 +5,6 @@ from src.utils.config import JWT_SECRET
 
 
 class AuthHandler:
-
     def __init__(self):
         self.secret = JWT_SECRET
 
