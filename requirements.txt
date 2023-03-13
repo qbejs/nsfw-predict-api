@@ -8,3 +8,4 @@ scikit-image>=0.18.0
 tensorflow-macos
 tqdm>=4.62
 loguru~=0.6.0
+starlette>=0.25.0 # not directly required, pinned by Snyk to avoid a vulnerability
