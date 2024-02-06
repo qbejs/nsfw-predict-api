@@ -1,4 +1,4 @@
-fastapi~=0.89.1
+fastapi~=0.109.1
 gdown>=4.2.0
 matplotlib>=3.0.0
 numpy>=1.22.0
